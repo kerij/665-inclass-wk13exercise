@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+    db:
+        image: consul
+        networks:
+            - pets-overlay
+    web:
+        image: chrch/docker-pets:1.0
+        deploy:
+            replicas: 2
+        ports:
+           - 80:5000
+        environment:
+           - DB=db
+        networks:
+           - pets-overlay
+
+networks:
+    pets-overlay:
+        driver: overlay
+        ipam:
+            config:
+                - subnet: 10.2.0.0/24
